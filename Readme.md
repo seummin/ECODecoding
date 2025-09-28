@@ -13,7 +13,6 @@ This repository contains a implementation of **ECO Decoding** for controllable d
 - **Multi-attribute friendly** — alleviates probability-interpolation issues; naturally extends via product over attributes.
 - Minimal runtime overhead in our tests (per-token latency +~1%).
 
-> For method details, ablations, and full results, see **Citation** at the bottom of this README.
 
 ---
 
