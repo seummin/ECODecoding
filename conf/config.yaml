@@ -1,0 +1,41 @@
+hydra :
+  run :
+    dir : ${experiment_dir}
+
+datamodule:
+  batch_size : 4
+  data_name : ${data_name}
+  max_seq_length : ${max_seq_length}
+  num_attr : 1
+ 
+defaults:
+  - learner: gpt2
+
+seed : 12
+local_rank : 0
+device : 'gpu'
+method : 'dialogpt'
+epochs : 10
+wandb : True
+test : False
+eval : False
+continue_train : False
+description : None
+max_seq_length : 512
+devices : 1
+num_training_steps : 500000
+patience : 5
+label_num : 6
+file_name : None
+
+gradient_accumulation_steps : 2
+learning_rate : 1e-04
+adam_epsilon : 1e-06
+warmup_proportion : 0.06
+max_grad_norm : 1
+weight_decay : 0.1
+
+experiment_dir : '../src/experiment/${method}'
+data_dir : '../../../../data/dailydialog'
+ckpt_path : None
+wandb_dir : '../wandb/${method}_test'

@@ -1,0 +1,10 @@
+- epochs=60
+- learning_rate=1e-5
+- gradient_accumulation_steps=8
+- method=gpt2_director2
+- datamodule.data_name=emo
+- seed=616
+- wandb=False
+- learner.use_prompt=True
+- learner.num_attribute=1
+- learner.pre_seq_len=200

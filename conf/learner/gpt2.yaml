@@ -1,0 +1,13 @@
+pre_seq_len : 100
+prefix_drop : 0.1
+num_labels : 6
+learning_rate : 1e-4
+ckpt_path : None
+use_prompt : False
+num_attribute : 1
+num_controls : 10
+freeze_base_model : True
+proj_dim : 384
+data_name : None
+condition_lambda : 1
+smoothing_factor : 1

@@ -1,0 +1,45 @@
+learner:
+  pre_seq_len: 200
+  prefix_drop: 0.1
+  num_labels: 6
+  learning_rate: 0.0001
+  ckpt_path: None
+  use_prompt: true
+  num_attribute: 1
+  num_controls: 10
+  freeze_base_model: true
+  proj_dim: 384
+  data_name: None
+  condition_lambda: 1
+  smoothing_factor: 1
+datamodule:
+  batch_size: 4
+  data_name: emo
+  max_seq_length: ${max_seq_length}
+  num_attr: 1
+seed: 616
+local_rank: 0
+device: gpu
+method: gpt2_director2
+epochs: 60
+wandb: false
+test: false
+eval: false
+continue_train: false
+description: None
+max_seq_length: 512
+devices: 1
+num_training_steps: 500000
+patience: 5
+label_num: 6
+file_name: None
+gradient_accumulation_steps: 8
+learning_rate: 1.0e-05
+adam_epsilon: 1.0e-06
+warmup_proportion: 0.06
+max_grad_norm: 1
+weight_decay: 0.1
+experiment_dir: ../src/experiment/${method}
+data_dir: ../../../../data/dailydialog
+ckpt_path: None
+wandb_dir: ../wandb/${method}_test
