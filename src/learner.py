@@ -102,14 +102,10 @@ class Learner(LightningModule):
         config = AutoConfig.from_pretrained('roberta-large')
         
         config.num_labels = 6
-        emo_all_classifier_path = '/nlp_data/seungmin/seungmin_was_in_ssd/seungmin/eco_decoding/classifier/no_emo_all/emo/2048/0.0001/checkpoint-7500/pytorch_model.bin'
-        # emo_all_classifier_path = '/nlp_data/seungmin/seungmin_was_in_ssd/seungmin/eco_decoding/classifier/roberta-meld-6cls/best_all'
-        # # '/nlp_data/seungmin/seungmin_was_in_ssd/seungmin/eco_decoding/classifier/no_emo_all/emo/2048/0.0001/checkpoint-7500/pytorch_model.bin'
-        self.emo_all_classifier = RobertaForSequenceClassification.from_pretrained(emo_all_classifier_path, config=config).to(self.device)
-        # self.emo_classifier = [self.emo_min_classifier,self.emo_all_classifier]
-        # self.emo_classifier = [self.emo_all_classifier]
+        emo_classifier_path = '' # emotion classifier path
+        self.emo_classifier = RobertaForSequenceClassification.from_pretrained(emo_classifier_path, config=config).to(self.device)
         config.num_labels = 4
-        act_classifier_path = '/nlp_data/seungmin/seungmin_was_in_ssd/seungmin/eco_decoding/classifier/act/2048/0.0001/checkpoint-10000/pytorch_model.bin'
+        act_classifier_path = '' # dialog-act classifier path
         self.act_classifier = RobertaForSequenceClassification.from_pretrained(act_classifier_path, config=config).to(self.device)
         
         
@@ -194,13 +190,7 @@ class Learner(LightningModule):
         inputs=[]
         entropy=0
         lent=0
-        ctrl_tok_sum_ms  = 0.0   # controls ON 총 소요 ms
-        ctrl_tok_cnt     = 0     # controls ON 카운트 (= test step 수)
-        base_tok_sum_ms  = 0.0   # controls OFF 총 소요 ms
-        base_tok_cnt     = 0
-
         for output in self.test_step_outputs:
-            # ---- 기존 코드 ----------------------------------------
             output_file.append(output['generated'].replace(self.tokenizer.eos_token, "\n").lstrip())
             inputs.append(output['inputs'].replace(self.tokenizer.eos_token, "\n").lstrip())
 
@@ -210,28 +200,6 @@ class Learner(LightningModule):
 
             label_response.append(output['response'][0].split(self.tokenizer.eos_token)[0])
             labels.append(output['labels'])
-            # -------------------------------------------------------
-
-            # ───────────────────────────────────────────────────────
-            # ➋ 토큰‑평균 소요 시간 누적
-            # ───────────────────────────────────────────────────────
-            if 'ctrl_tok_ms' in output and output['ctrl_tok_ms'] > 0:
-                ctrl_tok_sum_ms += output['ctrl_tok_ms']
-                ctrl_tok_cnt    += 1
-            if 'base_tok_ms' in output and output['base_tok_ms'] > 0:
-                base_tok_sum_ms += output['base_tok_ms']
-                base_tok_cnt    += 1
-        # ────────────────────────────────────────────────────────────
-
-        # ➌ 최종 평균 계산
-        avg_ctrl_tok_ms = ctrl_tok_sum_ms  / ctrl_tok_cnt  if ctrl_tok_cnt  > 0 else 0.0
-        avg_base_tok_ms = base_tok_sum_ms  / base_tok_cnt  if base_tok_cnt  > 0 else 0.0
-
-        print(f"\n토큰당 평균 생성 속도")
-        print(f"  ▸ CONTROL  ON : {avg_ctrl_tok_ms :.3f} ms")
-        print(f"  ▸ CONTROL OFF : {avg_base_tok_ms:.3f} ms")
-        # import pdb;pdb.set_trace();
-        # aspect accuracy
         if self.cfg.data_name=='emo':
             acc=[]
             f1_score=[]
@@ -248,7 +216,7 @@ class Learner(LightningModule):
                     return_attention_mask = True
                     )
                 # model_output = self.emo_min_classifier(input_ids = model_input['input_ids'].to(self.device), attention_mask = model_input['attention_mask'].to(self.device))
-                model_output1 = self.emo_all_classifier(input_ids = model_input['input_ids'].to(self.device), attention_mask = model_input['attention_mask'].to(self.device))
+                model_output1 = self.emo_classifier(input_ids = model_input['input_ids'].to(self.device), attention_mask = model_input['attention_mask'].to(self.device))
                 # preds.append(model_output['logits'].argmax(dim=1).item())
                 preds.append(model_output1['logits'].argmax(dim=1).item())
             # acc.append(accuracy.compute(predictions=preds, references=labels)) 
