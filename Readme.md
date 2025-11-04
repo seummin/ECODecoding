@@ -4,6 +4,14 @@
 
 This repository contains a implementation of **ECO Decoding** for controllable dialogue generation (CDG). It augments weighted decoding methods (e.g., **Director**, **DASC**) with **dynamic, per-step control strength** computed from the entropy of the language model and attribute classifier distributions.
 
+
+## 📢 News
+
+🎉 **Our paper has been accepted to EMNLP 2025 (Main Conference)!**  
+You can read the on arXiv here:  
+👉 [https://arxiv.org/abs/2511.01568](https://arxiv.org/abs/2511.01568)
+
+
 ---
 
 ## Highlights
@@ -26,7 +34,6 @@ This repository contains a implementation of **ECO Decoding** for controllable d
 ├─ datamodule.py                  # DataModule for DailyDialog / MultiWOZ style corpora
 ├─ learner.py                     # LightningModule: training loop + ECO decoding hooks
 ├─ main.py                        # Hydra entrypoint (train/test)
-├─ perplexity.py                  # Perplexity metric helper
 ├─ run.sh                         # Example training command(s)
 └─ test.sh                        # Example test/inference commands with ECO knobs
 ```
@@ -55,11 +62,6 @@ CUDA_VISIBLE_DEVICES=0 python main.py epochs=30 \
   datamodule.data_name=emo seed=616 wandb=False \
   learner.use_prompt=True learner.num_attribute=1 learner.pre_seq_len=200
 ```
-
-**Tips**
-
-- `method` can be switched to your preferred backend (e.g., a DASC variant) if implemented.
-- Hydra’s default config path is `../conf/config.yaml` from `main.py`; CLI overrides allow you to run without editing config files.
 
 ---
 
