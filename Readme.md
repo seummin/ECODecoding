@@ -1,4 +1,4 @@
-# ECO Decoding — Entropy-Based Control for Controllable Dialogue Generation
+# ECO Decoding: Entropy-Based Control for Controllability and Fluency in Controllable Dialogue Generation
 
 > **One-line**: A decoding-time method that *dynamically* balances **controllability** and **fluency** by scaling attribute logits with **entropy based control strength**.
 
